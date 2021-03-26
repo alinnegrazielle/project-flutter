@@ -1,3 +1,3 @@
 # project-flutter
-app financial transactions
-Aplicação referente a primeira nota de ProgIV.
+
+Aplicação referente a primeira nota de ProgIV: app financial transactions.
