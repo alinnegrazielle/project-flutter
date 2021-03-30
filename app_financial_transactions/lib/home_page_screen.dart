@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'models/transactions.dart';
 
 class HomePage extends StatefulWidget {
+  var itens = new List<Transaction>();
+
+  HomePage() {
+    itens = [];
+    itens.add(Transaction(title: "Depósito 1"));
+    itens.add(Transaction(title: "Depósito 2"));
+    itens.add(Transaction(title: "Depósito 3"));
+  }
+
   @override
   _HomePageState createState() {
     return _HomePageState();
@@ -14,12 +24,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Banco Exemplo S/A"),
       ),
-      body: buildListView(),
+      body: ListView.builder(
+        itemCount: widget.itens.length,
+        itemBuilder: (BuildContext ctxt, int index) {
+          return Text(widget.itens[index].title);
+        },
+      ),
     );
   }
 
   buildListView() {
-    final dep = List<String>.generate(3, (i) => "Depósito $i");
+    final dep = List<String>.generate(5, (i) => "Depósito $i");
 
     return ListView.builder(
       itemCount: dep.length,
