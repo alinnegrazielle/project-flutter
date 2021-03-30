@@ -11,7 +11,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text("Banco Exemplo S/AAA"),
+=======
+        title: Text("Banco Exemplo S/A"),
+>>>>>>> parent of 7af2e79 (created ALINNE)
       ),
       body: Container(
         child: Text("EXTRATO"),
