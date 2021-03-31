@@ -1,5 +1,6 @@
 class Transaction {
   String title;
-
-  Transaction({this.title});
+  double value;
+  
+  Transaction({this.title,this.value});
 }
