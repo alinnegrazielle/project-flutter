@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'models/transactions.dart';
 
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 Random rnd = Random();
 
 class HomePage extends StatefulWidget {
@@ -12,9 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double saldoDepo = 0.00;
-  double saldoSaq = 0.00;
+  double saldo = 0.00;
   List<Transaction> listTransaction = [];
+
 
   @override
   void initState() {
@@ -24,35 +26,55 @@ class _HomePageState extends State<HomePage> {
   addDeposito() {
     double deposito = rnd.nextInt(100).toDouble();
     listTransaction.add(
-      Transaction(title: "Depósito 1", value: deposito),
+      Transaction(title: "Depósito", value: deposito),
     );
 
     setState(() {
-      saldoDepo = saldoDepo + deposito;
+      saldo = saldo + deposito;
     });
   }
 
   addSaque() {
-    double saque = rnd.nextInt(1000).toDouble();
-    listTransaction.add(
-      Transaction(title: "Depósito 1", value: saque),
-    );
+    double saque = rnd.nextInt(50).toDouble();
+    if ((saldo - saque) < 0.0){
+      return Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Saldo insuficiente",
+      desc: "Sua conta não tem saldo suficiente para fazer o saque solicitado no valor de $saldo reais",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "VOLTAR",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+    }else{
+      listTransaction.add(
+      Transaction(title: "Saque", value: saque),
+      );
 
-    setState(() {
-      saldoSaq = saldoSaq + saque;
-    });
+      setState(() {
+        saldo = saldo - saque;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 70,
             child: Center(
               child: Text(
-                '$saldoDepo',
+                '$saldo',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
@@ -60,61 +82,38 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Container(
-            child: Center(
-              child: Text(
-                '$saldoSaq',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
+          Expanded(
+            flex: 15,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FlatButton(
+                color: Colors.green,
+                child: Text(
+                  'Depósito',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
                 ),
+                onPressed: addDeposito,
               ),
             ),
           ),
-          Container(
-            height: 50.0,
-            width: 110.0,
-            decoration: BoxDecoration(
-              color: Colors.greenAccent,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(22.0),
-                topLeft: Radius.circular(22.00),
-                bottomRight: Radius.circular(200.0),
-              ),
-            ),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text(
-                'Depósito',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
+          Expanded(
+            flex: 15,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FlatButton(
+                color: Colors.red,
+                child: Text(
+                  'Saque',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
                 ),
+                onPressed: addSaque,
               ),
-              onPressed: addDeposito,
-            ),
-          ),
-          Container(
-            height: 50.0,
-            width: 110.0,
-            decoration: BoxDecoration(
-              color: Colors.greenAccent,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(22.0),
-                topLeft: Radius.circular(22.00),
-                bottomRight: Radius.circular(200.0),
-              ),
-            ),
-            child: FlatButton(
-              color: Colors.green,
-              child: Text(
-                'Saque',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: addSaque,
             ),
           ),
         ],
